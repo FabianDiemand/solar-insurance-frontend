@@ -6,7 +6,12 @@
 	"image": "mcr.microsoft.com/devcontainers/typescript-node:1-20-bullseye",
 	"features": {
 		"ghcr.io/devcontainers/features/node:1": {}
-	}
+	},
+	"mounts": [{
+		"source": "/home/${localEnv:USER}/.ssh",
+		"target": "/home/node/.ssh",
+		"type": "bind"
+	}],
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
@@ -15,7 +20,7 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "yarn install",
+	"postCreateCommand": "yarn install",
 
 	// Configure tool-specific properties.
 	// "customizations": {},
