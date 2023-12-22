@@ -20,6 +20,6 @@
 }
 
 .tab:not(.tab-active) {
-  @apply hover:bg-gray-transparent-5
+  @apply hover:bg-gray-transparent-7
 }
 

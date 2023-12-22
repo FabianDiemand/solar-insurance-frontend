@@ -11,7 +11,7 @@ export const Container = () => {
           Demo
         </a>
       </div>
-      <div className="size-full bg-gray-transparent-8 rounded-3xl"></div>
+      <div className="size-full bg-gray-transparent-9 rounded-3xl"></div>
     </div>
   );
 

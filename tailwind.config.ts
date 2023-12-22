@@ -11,7 +11,7 @@ module.exports = {
       colors: {
         'gray-transparent-8': 'rgba(214, 203, 195, 0.8)',
         'gray-transparent-9': 'rgba(214, 203, 195, 0.9)',
-        'gray-transparent-5': 'rgba(214, 203, 195, 0.5)',
+        'gray-transparent-7': 'rgba(214, 203, 195, 0.7)',
       }
     },
   },
