@@ -9,15 +9,18 @@
   "scripts": {
     "start": "webpack serve --config ./webpack/webpack.config.js --env env=dev --open",
     "build-test": "webpack --config ./webpack/webpack.config.js --env env=test",
-    "build": "webpack --config ./webpack/webpack.config.js --env env=prod"
+    "build": "webpack --config ./webpack/webpack.config.js --env env=prod",
+    "abi-to-interface": "abi-types-generator /workspaces/solar-insurance-frontend/src/utils/contract/solar-insurance.abi.json --output=/workspaces/solar-insurance-frontend/src/components/helper/contract --name=SolarInsuranceContract --provider=ethers_v5"
   },
   "dependencies": {
     "@babel/runtime": "^7.23.6",
+    "@typechain/ethers-v6": "^0.5.1",
     "core-js": "^3.34.0",
     "daisyui": "^4.4.23",
     "ethers": "^6.9.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "recoil": "^0.7.7"
   },
   "devDependencies": {
     "@babel/core": "^7.23.6",
@@ -36,6 +39,7 @@
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.8.1",
+    "dotenv-webpack": "^8.0.1",
     "eslint": "^8.56.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.1.0",

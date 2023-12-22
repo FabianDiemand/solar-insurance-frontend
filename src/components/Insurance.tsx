@@ -1,34 +1,45 @@
-import { Contract, Signer } from 'ethers';
 import React, { useEffect, useState } from 'react';
-import { EtherscanLink } from './helper/insurance/EtherscanLink';
-import { About } from './helper/insurance/About';
+import { AboutContract } from './helper/insurance/About';
+import { useRecoilValue } from 'recoil';
+import { connectedState, signerState } from './helper/metamask/Metamask.atoms';
+import { SolarInsuranceABI } from '@/utils/contract/solar-insurance.abi';
+import { Contract } from 'ethers';
 
-interface InsuranceProps {
-  signer: Signer,
-  contract: Contract
-}
 
-export const Insurance = (props: InsuranceProps) => {
+
+export const Insurance = () => {
   const [owner, setOwner] = useState('');
-  const [contractAddress, setContractAddress] = useState('');
+  const [contractAddress, setContractAddress] = useState('');  
+  const connected = useRecoilValue(connectedState);
+  const signer = useRecoilValue(signerState);
+
+  const [contract, setContract] = useState<any>();
 
   useEffect(() => {
-    const getInfo = async () => {
-      const owner = await props.contract.owner();
-      const address = await props.contract.getAddress();
-      setOwner(owner);
-      setContractAddress(address);
-    }
+    if(connected){
+      const contract = new Contract(
+        process.env.CONTRACT_ADDRESS,
+        SolarInsuranceABI,
+        signer,
+      );
 
-    getInfo();
-  })
+      contract.owner().then(setOwner);
+      contract.getAddress().then(setContractAddress);
+
+      setContract(contract);
+    }
+  }, [connected])
+
+  const logOwner = () => {
+    contract.owner().then(console.log);
+  }
 
   return (
     <div className="h-full w-full flex flex-col items-center">
       <h1 className="w-full text-center text-xl font-bold text-black mt-2">
         Solar Insurance Smart Contract
       </h1>
-      <About owner={owner} deployment={contractAddress}/>
+      <AboutContract owner={owner} deployment={contractAddress}/>
     </div>
   );
 }
