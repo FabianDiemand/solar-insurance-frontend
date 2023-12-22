@@ -28,11 +28,7 @@ export const Insurance = () => {
 
       setContract(contract);
     }
-  }, [connected])
-
-  const logOwner = () => {
-    contract.owner().then(console.log);
-  }
+  }, [connected]);
 
   return (
     <div className="h-full w-full flex flex-col items-center">
