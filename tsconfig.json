@@ -23,5 +23,8 @@
     "config/webpack",
     "./node_modules/**/*"
   ],
-  "include": ["./src/**/*", "@types", "__tests__"]
+  "include": ["./src/**/*", "@types", "__tests__"],
+  "files": [
+    "./src/utils/types/global.d.ts"
+  ]
 }
