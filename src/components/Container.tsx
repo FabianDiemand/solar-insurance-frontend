@@ -9,23 +9,18 @@ export const Container = () => {
   const [insuranceActive, setInsuranceActive] = useState(true);
   const [demoActive, setDemoActive] = useState(false);
 
-  const onDemoClicked = () => {
-    setDemoActive(true);
-    setInsuranceActive(false);
-  }
-
-  const onInsuranceClicked = () => {
-    setInsuranceActive(true);
-    setDemoActive(false);
+  const flipViews = () => {
+    setInsuranceActive(!insuranceActive);
+    setDemoActive(!demoActive);
   }
 
   return (
     <div className="size-5/6 flex flex-col items-center">
       <div role="tablist" className="w-[60%] tabs">
-        <a role="tab" id="insurance" className={`tab ${insuranceActive && 'tab-active pointer-events-none'}`} onClick={onInsuranceClicked}>
+        <a role="tab" id="insurance" className={`tab ${insuranceActive && 'tab-active pointer-events-none'}`} onClick={flipViews}>
           Insurance
         </a>
-        <a role="tab" id="demo" className={`tab ${demoActive && 'tab-active pointer-events-none'}`} onClick={onDemoClicked}>
+        <a role="tab" id="demo" className={`tab ${demoActive && 'tab-active pointer-events-none'}`} onClick={flipViews}>
           Demo
         </a>
       </div>
