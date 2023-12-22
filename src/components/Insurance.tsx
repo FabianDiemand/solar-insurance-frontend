@@ -1,7 +1,7 @@
 import { Contract, Signer } from 'ethers';
 import React, { useEffect, useState } from 'react';
-import { EtherscanLink } from './helper/EtherscanLink';
-import { About } from './helper/About';
+import { EtherscanLink } from './helper/insurance/EtherscanLink';
+import { About } from './helper/insurance/About';
 
 interface InsuranceProps {
   signer: Signer,

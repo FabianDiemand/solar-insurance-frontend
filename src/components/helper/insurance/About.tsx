@@ -13,7 +13,7 @@ export const About = (props: AboutProps) => {
         <tbody>
           {props.owner && <EtherscanLink title="Owner" address={props.owner} />}
           {props.deployment && (
-            <EtherscanLink title="Deployment" address={props.deployment} />
+            <EtherscanLink title="Contract" address={props.deployment} />
           )}
         </tbody>
       </table>

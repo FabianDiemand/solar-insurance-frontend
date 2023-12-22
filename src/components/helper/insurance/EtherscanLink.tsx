@@ -10,7 +10,7 @@ export const EtherscanLink = (props: EtherScanProps) => {
     <tr className="h-6">
       <td className="pr-4">{`${props.title}`}</td>
       <td>
-        <img src="assets/img/etherscan.png" className="h-6 inline" />
+        <img src="assets/img/etherscan-logo.svg" className="h-6 inline" />
         {'  '}
         <a
           href={`https://sepolia.etherscan.io/address/${props.address}`}
