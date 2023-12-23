@@ -1,25 +1,16 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { connectedState, signerState } from './helper/metamask/Metamask.atoms';
-import { Contract, WeiPerEther, ethers } from 'ethers';
+import { connectedState, providerState, signerState } from './helper/metamask/Metamask.atoms';
+import { BigNumberish, Contract, WeiPerEther, ethers, formatEther } from 'ethers';
 import { SolarInsuranceABI } from '@/utils/contract/solar-insurance.abi';
 
 export const Demo = () => {
-  const [owner, setOwner] = useState('');
-  const [contractAddress, setContractAddress] = useState('');
-  const [calcPremium, setCalcPremium] = useState(0);
-  const [showPremium, setShowPremium] = useState(false);
   const connected = useRecoilValue(connectedState);
+  const provider = useRecoilValue(providerState)
   const signer = useRecoilValue(signerState);
 
-  const [holder, setHolder] = useState('');
-  const [risk, setRisk] = useState('');
-  const [region, setRegion] = useState('');
-  const [area, setArea] = useState<number>();
-  const [premium, setPremium] = useState('');
-  const [registration, setRegistration] = useState<Date>();
-  const [validity, setValidity] = useState<Date>();
-  const [claimTimeout, setClaimTimeout] = useState<Date>();
+  const [balance, setBalance] = useState<BigNumberish>(0);
+  const [hasBalance, setHasBalance] = useState(false);
 
   const [contract, setContract] = useState<any>();
 
@@ -31,10 +22,12 @@ export const Demo = () => {
         signer,
       );
 
-      contract.owner().then(setOwner);
-      contract.getAddress().then(setContractAddress);
-
       setContract(contract);
+
+      provider.getBalance(contract.getAddress()).then(bal => {
+        setBalance(bal);
+        setHasBalance(true);
+      });
     }
   }, [connected]);
 
@@ -102,6 +95,7 @@ export const Demo = () => {
             Fund the contract with some ETH in order to be able of paying out
             funds.
           </div>
+          {hasBalance && <div>Current Balance: {formatEther(balance)} ETH</div>}
           <form className="space-y-2" onSubmit={fundContract}>
             <div>
               <label htmlFor="value" className="font-bold text-xs">
