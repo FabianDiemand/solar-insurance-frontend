@@ -42,6 +42,7 @@ export const Insurance = () => {
 
       contract.owner().then(setOwner);
       contract.getAddress().then(setContractAddress);
+      contract.getPolicyInformation().then(setPolicyInformation);
 
       setContract(contract);
     }
@@ -88,17 +89,21 @@ export const Insurance = () => {
         console.log('No policy for this account yet.');
       }
 
-      setHolder(policy[0]);
-      setRegion(mapRegions(policy[1]));
-      setRisk(mapRisks(policy[2]));
-      setArea(Number.parseInt(policy[3]));
-      setPremium(formatEther(BigInt(policy[4])));
-      setRegistration(new Date(Number.parseInt(policy[5]) * 1000));
-      setValidity(new Date(Number.parseInt(policy[6]) * 1000));
-      setClaimTimeout(new Date(Number.parseInt(policy[7]) * 1000));
+      setPolicyInformation(policy);
     } catch (err) {
       console.error(err);
     }
+  };
+
+  const setPolicyInformation = (policy) => {
+    setHolder(policy[0]);
+    setRegion(mapRegions(policy[1]));
+    setRisk(mapRisks(policy[2]));
+    setArea(Number.parseInt(policy[3]));
+    setPremium(formatEther(BigInt(policy[4])));
+    setRegistration(new Date(Number.parseInt(policy[5]) * 1000));
+    setValidity(new Date(Number.parseInt(policy[6]) * 1000));
+    setClaimTimeout(new Date(Number.parseInt(policy[7]) * 1000));
   };
 
   const renewPolicy = async () => {
@@ -122,9 +127,9 @@ export const Insurance = () => {
 
     const year = event.target['year'].value;
 
-    try{
+    try {
       await contract.fileClaim(year);
-    } catch(err){
+    } catch (err) {
       console.error(err);
     }
   };
