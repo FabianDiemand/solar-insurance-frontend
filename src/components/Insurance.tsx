@@ -136,7 +136,7 @@ export const Insurance = () => {
       </h1>
       <AboutContract owner={owner} deployment={contractAddress} />
       <div className="w-full h-full flex justify-between">
-        <div className="bg-orange-transparent-8 w-[24%] h-full rounded-md shadow-lg px-6 py-3 space-y-4">
+        <div className="bg-gray-transparent w-[24%] h-full rounded-md shadow-lg px-6 py-3 space-y-4">
           <h2 className="w-full text-center text-lg font-bold">
             Calculate Premium
           </h2>
@@ -206,7 +206,7 @@ export const Insurance = () => {
             )} ETH.`}</p>
           )}
         </div>
-        <div className="bg-orange-transparent-8 w-[24%] h-full rounded-md shadow-lg px-6 py-3 space-y-4">
+        <div className="bg-gray-transparent w-[24%] h-full rounded-md shadow-lg px-6 py-3 space-y-4">
           <h2 className="w-full text-center text-lg font-bold">
             Register Policy
           </h2>
@@ -271,7 +271,7 @@ export const Insurance = () => {
             </div>
           </form>
         </div>
-        <div className="bg-orange-transparent-8 w-[24%] h-full rounded-md shadow-lg px-6 py-3 space-y-4">
+        <div className="bg-gray-transparent w-[24%] h-full rounded-md shadow-lg px-6 py-3 space-y-4">
           <h2 className="w-full text-center text-lg font-bold">
             Currently Active Policy
           </h2>
@@ -331,7 +331,7 @@ export const Insurance = () => {
             </button>
           </div>
         </div>
-        <div className="bg-orange-transparent-8 w-[24%] h-full rounded-md shadow-lg px-6 py-3 space-y-4">
+        <div className="bg-gray-transparent w-[24%] h-full rounded-md shadow-lg px-6 py-3 space-y-4">
           <h2 className="w-full text-center text-lg font-bold">File Claim</h2>
           <form className="space-y-2" onSubmit={fileClaim}>
             <div>
