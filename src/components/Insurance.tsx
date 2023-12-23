@@ -106,7 +106,7 @@ export const Insurance = () => {
     setClaimTimeout(new Date(Number.parseInt(policy[7]) * 1000));
   };
 
-  const renewPolicy = async () => {
+  const extendPolicy = async () => {
     try {
       const policy = await contract.getPolicyInformation();
 
@@ -331,8 +331,8 @@ export const Insurance = () => {
             <button className="btn btn-sm btn-neutral" onClick={displayPolicy}>
               Refresh View
             </button>
-            <button className="btn btn-sm btn-success" onClick={renewPolicy}>
-              Renew Policy
+            <button className="btn btn-sm btn-success" onClick={extendPolicy}>
+              Extend Policy
             </button>
           </div>
         </div>
