@@ -13,6 +13,7 @@ Repository Smart Contract:  https://github.com/FabianDiemand/solar-insurance-sma
   * [2.1 Hauptansicht/ Landing Page](#21-hauptansicht-landing-page)
   * [2.2 Demo-Ansicht](#22-demo-ansicht)
 * [3 Installation](#3-installation)
+* [4 Demo/ Storybook](#4-demo-storybook)
 
 ---
 
@@ -27,8 +28,14 @@ Die Erkenntnis, dass dieser Indikator nicht alleine relevant für eine Aussage �
 
 ### 2.1 Hauptansicht/ Landing Page
 ![Hauptansicht](./img/fe-main.png)
+<!-- TODO Erklären -->
 
 ### 2.2 Demo-Ansicht
 ![Demoansicht](./img/fe-demo.png)
+<!-- TODO Erklären -->
 
 ## 3 Installation
+<!-- TODO Docker Compose Deployment umsetzen und erklären -->
+
+## 4 Demo/ Storybook
+<!-- TODO Demo/ Storybook erstellen -->
