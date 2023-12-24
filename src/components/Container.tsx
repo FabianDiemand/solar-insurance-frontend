@@ -11,8 +11,8 @@ import { connectedState } from './helper/metamask/Metamask.atoms';
 export const Container = () => {
   const connected = useRecoilValue(connectedState);
 
-  const [insuranceActive, setInsuranceActive] = useState(false);
-  const [demoActive, setDemoActive] = useState(true);
+  const [insuranceActive, setInsuranceActive] = useState(true);
+  const [demoActive, setDemoActive] = useState(false);
 
   const flipViews = () => {
     setInsuranceActive(!insuranceActive);
