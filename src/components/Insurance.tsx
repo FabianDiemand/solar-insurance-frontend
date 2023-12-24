@@ -1,5 +1,5 @@
 import React, { FormEvent, useEffect, useState } from 'react';
-import { AboutContract } from './helper/insurance/About';
+import { AboutContract } from './helper/insurance/AboutContract';
 import { useRecoilValue } from 'recoil';
 import { connectedState, signerState } from './helper/metamask/Metamask.atoms';
 import { SolarInsuranceABI } from '@/utils/contract/solar-insurance.abi';
@@ -11,7 +11,12 @@ import {
   isError,
   parseEther,
 } from 'ethers';
-import { mapRegions, mapRisks } from '@/utils/contract/values.maps';
+import { SunshineRecords } from './helper/common/SunshineRecords';
+import { FileClaim } from './helper/common/FileClaim';
+import { CurrentlyActivePolicy, InsurancePolicy } from './helper/insurance/CurrentlyActivePolicy';
+import { PolicyForm } from './helper/insurance/utility/PolicyForm';
+import { RegisterPolicy } from './helper/insurance/RegisterPolicy';
+import { CalculatePremium } from './helper/insurance/CalculatePremium';
 
 export const Insurance = () => {
   const [owner, setOwner] = useState('');
@@ -22,18 +27,10 @@ export const Insurance = () => {
   const signer = useRecoilValue(signerState);
 
   const [hasPolicy, setHasPolicy] = useState(false);
-  const [holder, setHolder] = useState('');
-  const [risk, setRisk] = useState('');
   const [insuredHoursLow, setInsuredHoursLow] = useState<number>();
   const [insuredHoursMid, setInsuredHoursMid] = useState<number>();
   const [insuredHoursHigh, setInsuredHoursHigh] = useState<number>();
-  const [insuredHours, setInsuredHours] = useState('');
-  const [region, setRegion] = useState('');
-  const [area, setArea] = useState<number>();
-  const [premium, setPremium] = useState('');
-  const [registration, setRegistration] = useState<Date>();
-  const [validity, setValidity] = useState<Date>();
-  const [claimTimeout, setClaimTimeout] = useState<Date>();
+  const [policy, setPolicy] = useState<InsurancePolicy>();
 
   const [sunshineRecords, setSunshineRecords] = useState<any[]>();
   const [hasRecords, setHasRecords] = useState(false);
@@ -53,12 +50,6 @@ export const Insurance = () => {
       contract
         .getPolicyInformation()
         .then(setPolicyInformation)
-        .catch(console.warn);
-      contract
-        .getInsuredRiskOfPolicy()
-        .then((risk) => {
-          setInsuredHours(risk[1]);
-        })
         .catch(console.warn);
 
       contract
@@ -86,7 +77,7 @@ export const Insurance = () => {
     }
   }, [connected]);
 
-  const calculatePremium = (event: FormEvent) => {
+  const calculatePremium = async (event: FormEvent) => {
     event.preventDefault();
 
     const risk = event.target['risk'].value;
@@ -130,7 +121,11 @@ export const Insurance = () => {
       contract
         .getInsuredRiskOfPolicy()
         .then((risk) => {
-          setInsuredHours(risk[1]);
+          policy.insuredHours = risk[1];
+                    // setPolicy({
+                    //   ...policy,
+                    //   insuredHours: risk[1],
+                    // });
         })
         .catch(console.warn);
 
@@ -142,14 +137,17 @@ export const Insurance = () => {
 
   const setPolicyInformation = async (policy) => {
     setHasPolicy(true);
-    setHolder(policy[0]);
-    setRegion(policy[2]);
-    setRisk(policy[4]);
-    setArea(Number.parseInt(policy[5]));
-    setPremium(formatEther(BigInt(policy[6])));
-    setRegistration(new Date(Number.parseInt(policy[7]) * 1000));
-    setValidity(new Date(Number.parseInt(policy[8]) * 1000));
-    setClaimTimeout(new Date(Number.parseInt(policy[9]) * 1000));
+
+    setPolicy({
+      holder: policy[0],
+      region: policy[2],
+      insuredRisk: policy[4],
+      area: Number.parseInt(policy[5]),
+      premium: formatEther(BigInt(policy[6])),
+      registration: new Date(Number.parseInt(policy[7]) * 1000),
+      validity: new Date(Number.parseInt(policy[8]) * 1000),
+      claimTimeout: new Date(Number.parseInt(policy[9]) * 1000),
+    });
   };
 
   const extendPolicy = async () => {
@@ -207,284 +205,42 @@ export const Insurance = () => {
       <AboutContract owner={owner} deployment={contractAddress} />
       <div className="w-full h-full flex justify-between">
         <div className="bg-gray-transparent w-[24%] h-full rounded-md shadow-lg px-6 py-3 space-y-4">
-          <h2 className="w-full text-center text-lg font-bold">
-            Calculate Premium
-          </h2>
-          <div className="text-center text-sm">
-            Find out which yearly premium applies to your desired policy.
-          </div>
-          <form className="space-y-2" onSubmit={calculatePremium}>
-            <div>
-              <label htmlFor="risk" className="font-bold text-xs">
-                Insured risk
-              </label>
-              <input
-                id="risk"
-                name="risk"
-                type="range"
-                min={0}
-                max={2}
-                defaultValue={1}
-                className="range range-xs"
-                step={1}
-              />
-              <div className="w-full flex justify-between text-xs px-2">
-                <span className="tooltip" data-tip={insuredHoursLow + ' hours'}>
-                  <span>Low</span>
-                </span>
-                <span className="tooltip" data-tip={insuredHoursMid + ' hours'}>
-                  <span>Mid</span>
-                </span>
-                <span
-                  className="tooltip"
-                  data-tip={insuredHoursHigh + ' hours'}
-                >
-                  <span>High</span>
-                </span>
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="region" className="font-bold text-xs">
-                Panel region
-              </label>
-              <select
-                className="select select-sm select-bordered w-full max-w-xs bg-white"
-                id="region"
-                name="region"
-                defaultValue={1}
-              >
-                <option value={1}>Switzerland North</option>
-                <option value={0}>Switzerland South</option>
-              </select>
-            </div>
-
-            <div>
-              <label htmlFor="area" className="font-bold text-xs">
-                Panel area
-              </label>
-              <input
-                type="number"
-                id="area"
-                name="area"
-                placeholder="Type here"
-                className="input input-sm input-bordered w-full max-w-xs bg-white"
-                min={1}
-                defaultValue={1}
-              />
-            </div>
-            <div className="w-full flex justify-center">
-              <button type="submit" className="btn btn-sm btn-success">
-                Calculate
-              </button>
-            </div>
-          </form>
-          {showPremium && (
-            <p>{`The yearly premium for this policy is ${formatEther(
-              calcPremium,
-            )} ETH.`}</p>
-          )}
+          <CalculatePremium
+            submitAction={calculatePremium}
+            insuredHoursLow={insuredHoursLow}
+            insuredHoursMid={insuredHoursMid}
+            insuredHoursHigh={insuredHoursHigh}
+            submitButtonText="Calculate"
+            showPremium={showPremium}
+            premium={formatEther(calcPremium)}
+          />
         </div>
         <div className="bg-gray-transparent w-[24%] h-full rounded-md shadow-lg px-6 py-3 space-y-4">
-          <h2 className="w-full text-center text-lg font-bold">
-            Register Policy
-          </h2>
-          <div className="text-center text-sm">
-            Register for a Solar Insurance policy.
-          </div>
-          <form className="space-y-2" onSubmit={registerPolicy}>
-            <div>
-              <label htmlFor="risk" className="font-bold text-xs">
-                Insured risk
-              </label>
-              <input
-                id="risk"
-                name="risk"
-                type="range"
-                min={0}
-                max={2}
-                defaultValue={1}
-                className="range range-xs"
-                step={1}
-              />
-              <div className="w-full flex justify-between text-xs px-2">
-                <span className="tooltip" data-tip={insuredHoursLow + ' hours'}>
-                  <span>Low</span>
-                </span>
-                <span className="tooltip" data-tip={insuredHoursMid + ' hours'}>
-                  <span>Mid</span>
-                </span>
-                <span
-                  className="tooltip"
-                  data-tip={insuredHoursHigh + ' hours'}
-                >
-                  <span>High</span>
-                </span>
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="region" className="font-bold text-xs">
-                Panel region
-              </label>
-              <select
-                className="select select-sm select-bordered w-full max-w-xs bg-white"
-                id="region"
-                name="region"
-                defaultValue={1}
-              >
-                <option value={1}>Switzerland North</option>
-                <option value={0}>Switzerland South</option>
-              </select>
-            </div>
-
-            <div>
-              <label htmlFor="area" className="font-bold text-xs">
-                Panel area
-              </label>
-              <input
-                type="number"
-                id="area"
-                name="area"
-                placeholder="Type here"
-                className="input input-sm input-bordered w-full max-w-xs bg-white"
-                min={1}
-                defaultValue={1}
-              />
-            </div>
-            <div className="w-full flex justify-center">
-              <button type="submit" className="btn btn-sm btn-success">
-                Register
-              </button>
-            </div>
-          </form>
+          <RegisterPolicy
+            submitAction={registerPolicy}
+            insuredHoursLow={insuredHoursLow}
+            insuredHoursMid={insuredHoursMid}
+            insuredHoursHigh={insuredHoursHigh}
+            submitButtonText="Register"
+          />
         </div>
         <div className="bg-gray-transparent w-[24%] h-full rounded-md shadow-lg px-6 py-3 space-y-4">
-          <h2 className="w-full text-center text-lg font-bold">
-            Currently Active Policy
-          </h2>
-          {hasPolicy && (
-            <div className="space-y-1">
-              <div>
-                <div className="font-bold text-xs">Policy Holder</div>
-                <div className="tooltip inline" data-tip={holder}>
-                  <div className="truncate">{holder}</div>
-                </div>
-              </div>
-              <div>
-                <div className="font-bold text-xs">Location</div>
-                <div className="truncate">{region}</div>
-              </div>
-              <div>
-                <div className="font-bold text-xs">Insured Risk</div>
-                <div className="truncate">
-                  {risk + ` (${insuredHours} hours)`}
-                </div>
-              </div>
-              <div>
-                <div className="font-bold text-xs">Panel Area</div>
-                <div className="truncate">
-                  {area + ' m'}
-                  <sup>2</sup>
-                </div>
-              </div>
-              <div>
-                <div className="font-bold text-xs">Premium</div>
-                <div className="truncate">{premium + ' ETH'}</div>
-              </div>
-              <div>
-                <div className="font-bold text-xs">Registration</div>
-                <div className="truncate">
-                  {registration?.toLocaleDateString('ch-CH')}
-                </div>
-              </div>
-              <div>
-                <div className="font-bold text-xs">Validity</div>
-                <div className="truncate">
-                  {validity?.toLocaleDateString('ch-CH')}
-                </div>
-              </div>
-              <div>
-                <div className="font-bold text-xs">Next Claim</div>
-                <div className="truncate">
-                  {claimTimeout?.toLocaleDateString('ch-CH')}
-                </div>
-              </div>
-            </div>
-          )}
-          <div className="w-full flex flex-row justify-around space-x-2">
-            <button className="btn btn-sm btn-success" onClick={extendPolicy}>
-              Extend Policy
-            </button>
-            <button className="btn btn-sm btn-error" onClick={deletePolicy}>
-              Delete Policy
-            </button>
-          </div>
-          <div className="w-full flex flex-row justify-around space-x-2">
-            <button className="btn btn-sm btn-neutral" onClick={displayPolicy}>
-              Refresh View
-            </button>
-          </div>
+          <CurrentlyActivePolicy
+            hasPolicy={hasPolicy}
+            policy={policy}
+            extendPolicy={extendPolicy}
+            deletePolicy={deletePolicy}
+            displayPolicy={displayPolicy}
+          />
         </div>
         <div className="bg-gray-transparent w-[24%] h-full rounded-md shadow-lg px-6 py-3 space-y-4">
-          <h2 className="w-full text-center text-lg font-bold">File Claim</h2>
-          <form className="space-y-2" onSubmit={fileClaim}>
-            <div>
-              <label htmlFor="year" className="font-bold text-xs">
-                Claim Year
-              </label>
-              <input
-                type="number"
-                id="year"
-                name="year"
-                placeholder="Type here"
-                className="input input-sm input-bordered w-full max-w-xs bg-white"
-                min={2023}
-                defaultValue={2023}
-              />
-            </div>
-            <div className="w-full flex justify-center">
-              <button className="btn btn-sm btn-error">File Claim</button>
-            </div>
-          </form>
-          <div className='divider divider-neutral my-12'/>
-          <h2 className="w-full text-center text-lg font-bold">
-            Sunshine Records
-          </h2>
-          {hasRecords && (
-            <>
-              <div className="overflow-x-auto">
-                <table className="table table-xs table-pin-rows table-pin-cols">
-                  <thead>
-                    <tr className="bg-gray-transparent text-black">
-                      <td>Year</td>
-                      <td>Sunshine Duration</td>
-                      <td>Region</td>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {sunshineRecords.map((record, i) => {
-                      return (
-                        <tr key={i}>
-                          <td>{Number.parseInt(record[2])}</td>
-                          <td>{Number.parseInt(record[3])}</td>
-                          <td>{record[1]}</td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </>
-          )}
-          <div className="w-full flex flex-row justify-around space-x-2">
-            <button
-              className="btn btn-sm btn-neutral"
-              onClick={getSunshineRecords}
-            >
-              Refresh View
-            </button>
-          </div>
+          <FileClaim isDemo={false} fileClaim={fileClaim} />
+          <div className="divider divider-neutral my-12" />
+          <SunshineRecords
+            hasRecords={hasRecords}
+            sunshineRecords={sunshineRecords}
+            getSunshineRecords={getSunshineRecords}
+          />
         </div>
       </div>
     </div>

@@ -9,10 +9,13 @@ import {
   BigNumberish,
   Contract,
   WeiPerEther,
-  ethers,
   formatEther,
 } from 'ethers';
 import { SolarInsuranceABI } from '@/utils/contract/solar-insurance.abi';
+import { SunshineRecords } from './helper/common/SunshineRecords';
+import { FileClaim } from './helper/common/FileClaim';
+import { CreateSunshineRecord } from './helper/demo/CreateSunshineRecords';
+import { FundContract } from './helper/demo/FundContract';
 
 export const Demo = () => {
   const connected = useRecoilValue(connectedState);
@@ -106,6 +109,7 @@ export const Demo = () => {
 
   return (
     <div className="h-full w-full flex flex-col items-center">
+      {/* Introduction section */}
       <h1 className="w-full text-center text-xl font-bold text-black mt-2">
         Solar Insurance Smart Contract -{' '}
         {<span className="text-red-600">Demo Section</span>}
@@ -114,157 +118,32 @@ export const Demo = () => {
         This section is intended to allow a experimental use of the frontend, to
         demonstrate/ test interactions with the smart contract.
       </div>
+
+      {/* Main section */}
       <div className="w-full h-full flex justify-between mt-4">
+        {/* Contract funding section */}
         <div className="bg-gray-transparent w-[32%] h-full rounded-md shadow-lg px-6 py-3 space-y-4 flex flex-col items-center">
-          <h2 className="w-full text-center text-lg font-bold">
-            Fund Contract
-          </h2>
-          <div className="text-center text-sm">
-            Fund the contract with some ETH in order to be able of paying out
-            funds.
-          </div>
-          {hasBalance && <div>Current Balance: {formatEther(balance)} ETH</div>}
-          <form className="space-y-2" onSubmit={fundContract}>
-            <div>
-              <label htmlFor="value" className="font-bold text-xs">
-                Fund amount (ETH)
-              </label>
-              <input
-                type="number"
-                id="value"
-                name="value"
-                placeholder="Type here"
-                className="input input-sm input-bordered w-full bg-white"
-                min={0}
-                defaultValue={1}
-                step={1}
-              />
-            </div>
-            <div className="w-full flex justify-center">
-              <button className="btn btn-sm btn-success">Fund Contract</button>
-            </div>
-          </form>
+          <FundContract
+            hasBalance={hasBalance}
+            balance={formatEther(balance)}
+            fundContract={fundContract}
+          />
         </div>
 
+        {/* Create sunshine record section */}
         <div className="bg-gray-transparent w-[32%] h-full rounded-md shadow-lg px-6 py-3 space-y-4 flex flex-col items-center">
-          <h2 className="w-full text-center text-lg font-bold">
-            Create Sunshine Record
-          </h2>
-          <div className="text-center text-sm">
-            Create records for sunshine durations in certain years, that will
-            allow to file claims for testing/ demo purposes.
-          </div>
-          <form className="space-y-2" onSubmit={createSunshineRecord}>
-            <div>
-              <label htmlFor="year" className="font-bold text-xs">
-                Year
-              </label>
-              <input
-                type="number"
-                id="year"
-                name="year"
-                placeholder="Type here"
-                className="input input-sm input-bordered w-full max-w-xs bg-white"
-                min={2023}
-                defaultValue={2023}
-              />
-            </div>
-
-            <div>
-              <label htmlFor="region" className="font-bold text-xs">
-                Record region
-              </label>
-              <select
-                className="select select-sm select-bordered w-full max-w-xs bg-white"
-                id="region"
-                name="region"
-                defaultValue={1}
-              >
-                <option value={1}>Switzerland North</option>
-                <option value={0}>Switzerland South</option>
-              </select>
-            </div>
-
-            <div>
-              <label htmlFor="sunshine" className="font-bold text-xs">
-                Hours of Sunshine
-              </label>
-              <input
-                type="number"
-                id="sunshine"
-                name="sunshine"
-                placeholder="Type here"
-                className="input input-sm input-bordered w-full max-w-xs bg-white"
-                min={1600}
-                defaultValue={1701}
-              />
-            </div>
-
-            <div className="w-full flex justify-center">
-              <button className="btn btn-sm btn-success">Create Record</button>
-            </div>
-          </form>
+          <CreateSunshineRecord createSunshineRecord={createSunshineRecord} />
         </div>
 
+        {/* File claim and record list section */}
         <div className="bg-gray-transparent w-[32%] h-full rounded-md shadow-lg px-6 py-3 space-y-4 flex flex-col items-center">
-          <h2 className="w-full text-center text-lg font-bold">File Claim</h2>
-          <div className="text-center text-sm">
-            File claims without the assertions that are in place for the
-            productive method of the contract.
-          </div>
-          {hasRecords && (
-            <>
-              <div className="overflow-x-auto w-full">
-                <table className="table table-xs table-pin-rows table-pin-cols">
-                  <thead>
-                    <tr className="bg-gray-transparent text-black">
-                      <td>Year</td>
-                      <td>Sunshine Duration</td>
-                      <td>Region</td>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {sunshineRecords.map((record, i) => {
-                      return (
-                        <tr key={i}>
-                          <td>{Number.parseInt(record[2])}</td>
-                          <td>{Number.parseInt(record[3])}</td>
-                          <td>{record[1]}</td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-              <div className="w-full flex flex-row justify-around space-x-2">
-                <button
-                  className="btn btn-sm btn-neutral"
-                  onClick={getSunshineRecords}
-                >
-                  Refresh View
-                </button>
-              </div>
-            </>
-          )}
-          <form className="space-y-2" onSubmit={fileClaim}>
-            <div>
-              <label htmlFor="year" className="font-bold text-xs">
-                Claim Year
-              </label>
-              <input
-                type="number"
-                id="year"
-                name="year"
-                placeholder="Type here"
-                className="input input-sm input-bordered w-full max-w-xs bg-white"
-                min={2023}
-                defaultValue={2023}
-              />
-            </div>
-            <div className="w-full flex justify-center">
-              <button className="btn btn-sm btn-error">File Claim</button>
-            </div>
-          </form>
+          <FileClaim isDemo={true} fileClaim={fileClaim} />
+          <div className="divider divider-neutral my-12" />
+          <SunshineRecords
+            hasRecords={hasRecords}
+            sunshineRecords={sunshineRecords}
+            getSunshineRecords={getSunshineRecords}
+          />
         </div>
       </div>
     </div>

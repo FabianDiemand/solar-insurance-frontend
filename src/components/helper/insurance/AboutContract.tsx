@@ -1,5 +1,5 @@
 import React from 'react';
-import { EtherscanLink } from './EtherscanLink';
+import { EtherscanLink } from './utility/EtherscanLink';
 interface AboutProps{
   owner: string,
   deployment: string
@@ -11,10 +11,8 @@ export const AboutContract = (props: AboutProps) => {
       <h2 className="w-full text-center text-lg font-bold">About Contract</h2>
       <table>
         <tbody>
-          {props.owner && <EtherscanLink title="Owner" address={props.owner} />}
-          {props.deployment && (
-            <EtherscanLink title="Contract" address={props.deployment} />
-          )}
+          <EtherscanLink title="Owner" address={props.owner} />
+          <EtherscanLink title="Contract" address={props.deployment} />
         </tbody>
       </table>
     </div>

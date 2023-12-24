@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { ethers } from 'ethers';
-import { ErrorBanner } from '../common/ErrorBanner';
+import { ErrorBanner } from '../common/utility/ErrorBanner';
 import {
   accountState,
   connectedState,

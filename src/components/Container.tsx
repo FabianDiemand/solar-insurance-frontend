@@ -7,6 +7,7 @@ import { Demo } from './Demo';
 import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { connectedState } from './helper/metamask/Metamask.atoms';
+import { Navigation } from './helper/navigation/Navigation';
 
 export const Container = () => {
   const connected = useRecoilValue(connectedState);
@@ -23,26 +24,7 @@ export const Container = () => {
     <>
       {!connected && <Metamask />}
       <div className={`size-5/6 flex flex-col items-center text-black ${!connected && 'pointer-events-none'}`}>
-        <div role="tablist" className="w-[60%] tabs">
-          <a
-            role="tab"
-            id="insurance"
-            className={`tab ${
-              insuranceActive && 'tab-active pointer-events-none'
-            }`}
-            onClick={flipViews}
-          >
-            Insurance
-          </a>
-          <a
-            role="tab"
-            id="demo"
-            className={`tab ${demoActive && 'tab-active pointer-events-none'}`}
-            onClick={flipViews}
-          >
-            Demo
-          </a>
-        </div>
+        <Navigation insuranceActive={insuranceActive} demoActive={demoActive} flipViews={flipViews}/>
         <div className="size-full bg-gray-transparent-9 rounded-3xl p-4">
           {insuranceActive && <Insurance />}
           {demoActive && <Demo/>}
