@@ -1,16 +1,28 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { connectedState, providerState, signerState } from './helper/metamask/Metamask.atoms';
-import { BigNumberish, Contract, WeiPerEther, ethers, formatEther } from 'ethers';
+import {
+  connectedState,
+  providerState,
+  signerState,
+} from './helper/metamask/Metamask.atoms';
+import {
+  BigNumberish,
+  Contract,
+  WeiPerEther,
+  ethers,
+  formatEther,
+} from 'ethers';
 import { SolarInsuranceABI } from '@/utils/contract/solar-insurance.abi';
 
 export const Demo = () => {
   const connected = useRecoilValue(connectedState);
-  const provider = useRecoilValue(providerState)
+  const provider = useRecoilValue(providerState);
   const signer = useRecoilValue(signerState);
 
   const [balance, setBalance] = useState<BigNumberish>(0);
   const [hasBalance, setHasBalance] = useState(false);
+  const [sunshineRecords, setSunshineRecords] = useState<any[]>();
+  const [hasRecords, setHasRecords] = useState(false);
 
   const [contract, setContract] = useState<any>();
 
@@ -24,10 +36,18 @@ export const Demo = () => {
 
       setContract(contract);
 
-      provider.getBalance(contract.getAddress()).then(bal => {
+      provider.getBalance(contract.getAddress()).then((bal) => {
         setBalance(bal);
         setHasBalance(true);
       });
+
+      contract
+        .getRelevantSunshineRecordsWithoutChecks()
+        .then((records) => {
+          setSunshineRecords(records);
+          setHasRecords(true);
+        })
+        .catch(console.warn);
     }
   }, [connected]);
 
@@ -35,8 +55,6 @@ export const Demo = () => {
     event.preventDefault();
 
     const amount = event.target['value'].value;
-    console.log(BigInt(amount) * WeiPerEther);
-    console.log(amount);
 
     try {
       const value = BigInt(amount) * WeiPerEther;
@@ -57,7 +75,6 @@ export const Demo = () => {
     const region = event.target['region'].value;
 
     try {
-      console.log(year, sunshine, region);
       await contract.createSunshineRecord(year, sunshine, region);
     } catch (err) {
       console.error(err);
@@ -76,6 +93,17 @@ export const Demo = () => {
     }
   };
 
+  const getSunshineRecords = async () => {
+    try {
+      const sunshineRecords =
+        await contract.getRelevantSunshineRecordsWithoutCheck();
+      setSunshineRecords(sunshineRecords);
+      setHasRecords(true);
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+
   return (
     <div className="h-full w-full flex flex-col items-center">
       <h1 className="w-full text-center text-xl font-bold text-black mt-2">
@@ -91,7 +119,7 @@ export const Demo = () => {
           <h2 className="w-full text-center text-lg font-bold">
             Fund Contract
           </h2>
-          <div className="text-center">
+          <div className="text-center text-sm">
             Fund the contract with some ETH in order to be able of paying out
             funds.
           </div>
@@ -122,7 +150,7 @@ export const Demo = () => {
           <h2 className="w-full text-center text-lg font-bold">
             Create Sunshine Record
           </h2>
-          <div className="text-center">
+          <div className="text-center text-sm">
             Create records for sunshine durations in certain years, that will
             allow to file claims for testing/ demo purposes.
           </div>
@@ -180,10 +208,44 @@ export const Demo = () => {
 
         <div className="bg-gray-transparent w-[32%] h-full rounded-md shadow-lg px-6 py-3 space-y-4 flex flex-col items-center">
           <h2 className="w-full text-center text-lg font-bold">File Claim</h2>
-          <div className="text-center">
+          <div className="text-center text-sm">
             File claims without the assertions that are in place for the
             productive method of the contract.
           </div>
+          {hasRecords && (
+            <>
+              <div className="overflow-x-auto w-full">
+                <table className="table table-xs table-pin-rows table-pin-cols">
+                  <thead>
+                    <tr className="bg-gray-transparent text-black">
+                      <td>Year</td>
+                      <td>Sunshine Duration</td>
+                      <td>Region</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {sunshineRecords.map((record, i) => {
+                      return (
+                        <tr key={i}>
+                          <td>{Number.parseInt(record[2])}</td>
+                          <td>{Number.parseInt(record[3])}</td>
+                          <td>{record[1]}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+              <div className="w-full flex flex-row justify-around space-x-2">
+                <button
+                  className="btn btn-sm btn-neutral"
+                  onClick={getSunshineRecords}
+                >
+                  Refresh View
+                </button>
+              </div>
+            </>
+          )}
           <form className="space-y-2" onSubmit={fileClaim}>
             <div>
               <label htmlFor="year" className="font-bold text-xs">

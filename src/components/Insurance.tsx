@@ -21,14 +21,22 @@ export const Insurance = () => {
   const connected = useRecoilValue(connectedState);
   const signer = useRecoilValue(signerState);
 
+  const [hasPolicy, setHasPolicy] = useState(false);
   const [holder, setHolder] = useState('');
   const [risk, setRisk] = useState('');
+  const [insuredHoursLow, setInsuredHoursLow] = useState<number>();
+  const [insuredHoursMid, setInsuredHoursMid] = useState<number>();
+  const [insuredHoursHigh, setInsuredHoursHigh] = useState<number>();
+  const [insuredHours, setInsuredHours] = useState('');
   const [region, setRegion] = useState('');
   const [area, setArea] = useState<number>();
   const [premium, setPremium] = useState('');
   const [registration, setRegistration] = useState<Date>();
   const [validity, setValidity] = useState<Date>();
   const [claimTimeout, setClaimTimeout] = useState<Date>();
+
+  const [sunshineRecords, setSunshineRecords] = useState<any[]>();
+  const [hasRecords, setHasRecords] = useState(false);
 
   const [contract, setContract] = useState<any>();
 
@@ -45,6 +53,33 @@ export const Insurance = () => {
       contract
         .getPolicyInformation()
         .then(setPolicyInformation)
+        .catch(console.warn);
+      contract
+        .getInsuredRiskOfPolicy()
+        .then((risk) => {
+          setInsuredHours(risk[1]);
+        })
+        .catch(console.warn);
+
+      contract
+        .getInsuredRiskByKey(0)
+        .then((risk) => setInsuredHoursLow(risk[1]))
+        .catch(console.warn);
+      contract
+        .getInsuredRiskByKey(1)
+        .then((risk) => setInsuredHoursMid(risk[1]))
+        .catch(console.warn);
+      contract
+        .getInsuredRiskByKey(2)
+        .then((risk) => setInsuredHoursHigh(risk[1]))
+        .catch(console.warn);
+
+      contract
+        .getRelevantSunshineRecords()
+        .then((record) => {
+          setSunshineRecords(new Array(record));
+          setHasRecords(true);
+        })
         .catch(console.warn);
 
       setContract(contract);
@@ -89,8 +124,15 @@ export const Insurance = () => {
       const policy = await contract.getPolicyInformation();
 
       if (!policy) {
-        console.log('No policy for this account yet.');
+        console.warn('No policy for this account yet.');
       }
+
+      contract
+        .getInsuredRiskOfPolicy()
+        .then((risk) => {
+          setInsuredHours(risk[1]);
+        })
+        .catch(console.warn);
 
       setPolicyInformation(policy);
     } catch (err) {
@@ -98,15 +140,16 @@ export const Insurance = () => {
     }
   };
 
-  const setPolicyInformation = (policy) => {
+  const setPolicyInformation = async (policy) => {
+    setHasPolicy(true);
     setHolder(policy[0]);
-    setRegion(mapRegions(policy[1]));
-    setRisk(mapRisks(policy[2]));
-    setArea(Number.parseInt(policy[3]));
-    setPremium(formatEther(BigInt(policy[4])));
-    setRegistration(new Date(Number.parseInt(policy[5]) * 1000));
-    setValidity(new Date(Number.parseInt(policy[6]) * 1000));
-    setClaimTimeout(new Date(Number.parseInt(policy[7]) * 1000));
+    setRegion(policy[2]);
+    setRisk(policy[4]);
+    setArea(Number.parseInt(policy[5]));
+    setPremium(formatEther(BigInt(policy[6])));
+    setRegistration(new Date(Number.parseInt(policy[7]) * 1000));
+    setValidity(new Date(Number.parseInt(policy[8]) * 1000));
+    setClaimTimeout(new Date(Number.parseInt(policy[9]) * 1000));
   };
 
   const extendPolicy = async () => {
@@ -114,7 +157,7 @@ export const Insurance = () => {
       const policy = await contract.getPolicyInformation();
 
       if (!policy) {
-        console.log('No policy for this account yet.');
+        console.warn('No policy for this account yet.');
       }
 
       const premium = policy[4];
@@ -125,13 +168,14 @@ export const Insurance = () => {
     }
   };
 
-    const deletePolicy = async () => {
-      try {
-        await contract.deletePolicy();
-      } catch (err) {
-        console.warn(err);
-      }
-    };
+  const deletePolicy = async () => {
+    try {
+      await contract.deletePolicy();
+      setHasPolicy(false);
+    } catch (err) {
+      console.warn(err);
+    }
+  };
 
   const fileClaim = async (event: FormEvent) => {
     event.preventDefault();
@@ -140,6 +184,16 @@ export const Insurance = () => {
 
     try {
       await contract.fileClaim(year);
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+
+  const getSunshineRecords = async () => {
+    try {
+      const sunshineRecord = await contract.getRelevantSunshineRecords();
+      setSunshineRecords(new Array(sunshineRecord));
+      setHasRecords(true);
     } catch (err) {
       console.warn(err);
     }
@@ -156,7 +210,7 @@ export const Insurance = () => {
           <h2 className="w-full text-center text-lg font-bold">
             Calculate Premium
           </h2>
-          <div className="text-center">
+          <div className="text-center text-sm">
             Find out which yearly premium applies to your desired policy.
           </div>
           <form className="space-y-2" onSubmit={calculatePremium}>
@@ -175,9 +229,18 @@ export const Insurance = () => {
                 step={1}
               />
               <div className="w-full flex justify-between text-xs px-2">
-                <span>Low</span>
-                <span>Mid</span>
-                <span>High</span>
+                <span className="tooltip" data-tip={insuredHoursLow + ' hours'}>
+                  <span>Low</span>
+                </span>
+                <span className="tooltip" data-tip={insuredHoursMid + ' hours'}>
+                  <span>Mid</span>
+                </span>
+                <span
+                  className="tooltip"
+                  data-tip={insuredHoursHigh + ' hours'}
+                >
+                  <span>High</span>
+                </span>
               </div>
             </div>
 
@@ -226,7 +289,7 @@ export const Insurance = () => {
           <h2 className="w-full text-center text-lg font-bold">
             Register Policy
           </h2>
-          <div className="text-center">
+          <div className="text-center text-sm">
             Register for a Solar Insurance policy.
           </div>
           <form className="space-y-2" onSubmit={registerPolicy}>
@@ -245,9 +308,18 @@ export const Insurance = () => {
                 step={1}
               />
               <div className="w-full flex justify-between text-xs px-2">
-                <span>Low</span>
-                <span>Mid</span>
-                <span>High</span>
+                <span className="tooltip" data-tip={insuredHoursLow + ' hours'}>
+                  <span>Low</span>
+                </span>
+                <span className="tooltip" data-tip={insuredHoursMid + ' hours'}>
+                  <span>Mid</span>
+                </span>
+                <span
+                  className="tooltip"
+                  data-tip={insuredHoursHigh + ' hours'}
+                >
+                  <span>High</span>
+                </span>
               </div>
             </div>
 
@@ -291,7 +363,7 @@ export const Insurance = () => {
           <h2 className="w-full text-center text-lg font-bold">
             Currently Active Policy
           </h2>
-          {holder && (
+          {hasPolicy && (
             <div className="space-y-1">
               <div>
                 <div className="font-bold text-xs">Policy Holder</div>
@@ -305,7 +377,9 @@ export const Insurance = () => {
               </div>
               <div>
                 <div className="font-bold text-xs">Insured Risk</div>
-                <div className="truncate">{risk}</div>
+                <div className="truncate">
+                  {risk + ` (${insuredHours} hours)`}
+                </div>
               </div>
               <div>
                 <div className="font-bold text-xs">Panel Area</div>
@@ -373,6 +447,44 @@ export const Insurance = () => {
               <button className="btn btn-sm btn-error">File Claim</button>
             </div>
           </form>
+          <div className='divider divider-neutral my-12'/>
+          <h2 className="w-full text-center text-lg font-bold">
+            Sunshine Records
+          </h2>
+          {hasRecords && (
+            <>
+              <div className="overflow-x-auto">
+                <table className="table table-xs table-pin-rows table-pin-cols">
+                  <thead>
+                    <tr className="bg-gray-transparent text-black">
+                      <td>Year</td>
+                      <td>Sunshine Duration</td>
+                      <td>Region</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {sunshineRecords.map((record, i) => {
+                      return (
+                        <tr key={i}>
+                          <td>{Number.parseInt(record[2])}</td>
+                          <td>{Number.parseInt(record[3])}</td>
+                          <td>{record[1]}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
+          <div className="w-full flex flex-row justify-around space-x-2">
+            <button
+              className="btn btn-sm btn-neutral"
+              onClick={getSunshineRecords}
+            >
+              Refresh View
+            </button>
+          </div>
         </div>
       </div>
     </div>
