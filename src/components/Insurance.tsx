@@ -42,7 +42,10 @@ export const Insurance = () => {
 
       contract.owner().then(setOwner);
       contract.getAddress().then(setContractAddress);
-      contract.getPolicyInformation().then(setPolicyInformation);
+      contract
+        .getPolicyInformation()
+        .then(setPolicyInformation)
+        .catch(console.warn);
 
       setContract(contract);
     }
@@ -91,7 +94,7 @@ export const Insurance = () => {
 
       setPolicyInformation(policy);
     } catch (err) {
-      console.error(err);
+      console.warn(err);
     }
   };
 
@@ -118,9 +121,17 @@ export const Insurance = () => {
       const options = { value: premium };
       await contract.extendPolicy(options);
     } catch (err) {
-      console.error(err);
+      console.warn(err);
     }
   };
+
+    const deletePolicy = async () => {
+      try {
+        await contract.deletePolicy();
+      } catch (err) {
+        console.warn(err);
+      }
+    };
 
   const fileClaim = async (event: FormEvent) => {
     event.preventDefault();
@@ -130,7 +141,7 @@ export const Insurance = () => {
     try {
       await contract.fileClaim(year);
     } catch (err) {
-      console.error(err);
+      console.warn(err);
     }
   };
 
@@ -327,12 +338,17 @@ export const Insurance = () => {
               </div>
             </div>
           )}
-          <div className="w-full flex flex-row justify-around">
-            <button className="btn btn-sm btn-neutral" onClick={displayPolicy}>
-              Refresh View
-            </button>
+          <div className="w-full flex flex-row justify-around space-x-2">
             <button className="btn btn-sm btn-success" onClick={extendPolicy}>
               Extend Policy
+            </button>
+            <button className="btn btn-sm btn-error" onClick={deletePolicy}>
+              Delete Policy
+            </button>
+          </div>
+          <div className="w-full flex flex-row justify-around space-x-2">
+            <button className="btn btn-sm btn-neutral" onClick={displayPolicy}>
+              Refresh View
             </button>
           </div>
         </div>
