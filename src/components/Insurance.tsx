@@ -3,21 +3,13 @@ import { AboutContract } from './helper/insurance/AboutContract';
 import { useRecoilValue } from 'recoil';
 import { connectedState, signerState } from './helper/metamask/Metamask.atoms';
 import { SolarInsuranceABI } from '@/utils/contract/solar-insurance.abi';
-import {
-  Contract,
-  JsonRpcError,
-  ethers,
-  formatEther,
-  isError,
-  parseEther,
-} from 'ethers';
+import { Contract, formatEther } from 'ethers';
 import { SunshineRecords } from './helper/common/SunshineRecords';
 import { FileClaim } from './helper/common/FileClaim';
 import {
   CurrentlyActivePolicy,
   InsurancePolicy,
 } from './helper/insurance/CurrentlyActivePolicy';
-import { PolicyForm } from './helper/insurance/utility/PolicyForm';
 import { RegisterPolicy } from './helper/insurance/RegisterPolicy';
 import { CalculatePremium } from './helper/insurance/CalculatePremium';
 
