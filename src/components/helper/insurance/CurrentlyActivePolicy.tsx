@@ -9,15 +9,15 @@ interface CurrentlyActivePolicyProps {
 }
 
 export type InsurancePolicy = {
-  holder: string,
-  region: string,
-  insuredRisk: string,
-  area: number,
-  premium:  string,
-  registration: Date,
-  validity: Date,
-  claimTimeout: Date
-}
+  holder: string;
+  region: string;
+  insuredRisk: string;
+  area: number;
+  premium: string;
+  registration: Date;
+  validity: Date;
+  claimTimeout: Date;
+};
 
 export const CurrentlyActivePolicy = (props: CurrentlyActivePolicyProps) => {
   return (
@@ -29,8 +29,8 @@ export const CurrentlyActivePolicy = (props: CurrentlyActivePolicyProps) => {
         <div className="space-y-1">
           <div>
             <div className="font-bold text-xs">Policy Holder</div>
-            <div className="tooltip inline" data-tip={props.policy.holder}>
-              <div className="truncate">{props.policy.holder}</div>
+            <div className="truncate tooltip" data-tip={props.policy.holder}>
+              {props.policy.holder}
             </div>
           </div>
           <div>
@@ -39,9 +39,7 @@ export const CurrentlyActivePolicy = (props: CurrentlyActivePolicyProps) => {
           </div>
           <div>
             <div className="font-bold text-xs">Insured Risk</div>
-            <div className="truncate">
-              {props.policy.insuredRisk}
-            </div>
+            <div className="truncate">{props.policy.insuredRisk}</div>
           </div>
           <div>
             <div className="font-bold text-xs">Panel Area</div>
@@ -92,5 +90,4 @@ export const CurrentlyActivePolicy = (props: CurrentlyActivePolicyProps) => {
       </div>
     </>
   );
-
-}
+};

@@ -5,12 +5,7 @@ import {
   providerState,
   signerState,
 } from './helper/metamask/Metamask.atoms';
-import {
-  BigNumberish,
-  Contract,
-  WeiPerEther,
-  formatEther,
-} from 'ethers';
+import { BigNumberish, Contract, WeiPerEther, formatEther } from 'ethers';
 import { SolarInsuranceABI } from '@/utils/contract/solar-insurance.abi';
 import { SunshineRecords } from './helper/common/SunshineRecords';
 import { FileClaim } from './helper/common/FileClaim';
@@ -47,7 +42,11 @@ export const Demo = () => {
       contract
         .getRelevantSunshineRecordsWithoutChecks()
         .then((records) => {
-          setSunshineRecords(records);
+          const recordsSorted = [...records].sort((a, b) => {
+            return Number.parseInt(a.year) - Number.parseInt(b.year);
+          });
+
+          setSunshineRecords(recordsSorted);
           setHasRecords(true);
         })
         .catch(console.warn);
@@ -57,17 +56,22 @@ export const Demo = () => {
   const fundContract = async (event: FormEvent) => {
     event.preventDefault();
 
-    const amount = event.target['value'].value;
-
     try {
+      const amount = event.target['value'].value;
       const value = BigInt(amount) * WeiPerEther;
 
       const options = { value: value };
-
       await contract.fundContract(options);
     } catch (err) {
       console.error(err);
     }
+  };
+
+  const getFund = async () => {
+    provider.getBalance(contract.getAddress()).then((bal) => {
+      setBalance(bal);
+      setHasBalance(true);
+    });
   };
 
   const createSunshineRecord = async (event: FormEvent) => {
@@ -87,9 +91,8 @@ export const Demo = () => {
   const fileClaim = async (event: FormEvent) => {
     event.preventDefault();
 
-    const year = event.target['year'].value;
-
     try {
+      const year = event.target['year'].value;
       await contract.fileClaimWithoutChecks(year);
     } catch (err) {
       console.error(err);
@@ -99,8 +102,12 @@ export const Demo = () => {
   const getSunshineRecords = async () => {
     try {
       const sunshineRecords =
-        await contract.getRelevantSunshineRecordsWithoutCheck();
-      setSunshineRecords(sunshineRecords);
+        await contract.getRelevantSunshineRecordsWithoutChecks();
+      const recordsSorted = [...sunshineRecords].sort((a, b) => {
+        return Number.parseInt(a.year) - Number.parseInt(b.year);
+      });
+
+      setSunshineRecords(recordsSorted);
       setHasRecords(true);
     } catch (err) {
       console.warn(err);
@@ -115,7 +122,7 @@ export const Demo = () => {
         {<span className="text-red-600">Demo Section</span>}
       </h1>
       <div>
-        This section is intended to allow a experimental use of the frontend, to
+        This section is intended to allow for experimental use of the DApp, to
         demonstrate/ test interactions with the smart contract.
       </div>
 
@@ -127,6 +134,7 @@ export const Demo = () => {
             hasBalance={hasBalance}
             balance={formatEther(balance)}
             fundContract={fundContract}
+            reload={getFund}
           />
         </div>
 

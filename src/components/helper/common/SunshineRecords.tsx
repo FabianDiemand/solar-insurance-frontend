@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 interface SunshineRecordsProps{
   hasRecords: boolean;
@@ -17,7 +17,7 @@ export const SunshineRecords = (props: SunshineRecordsProps) => {
               <thead>
                 <tr className="bg-gray-transparent text-black">
                   <td>Year</td>
-                  <td>Sunshine Duration</td>
+                  <td>Sunshine Hours</td>
                   <td>Region</td>
                 </tr>
               </thead>

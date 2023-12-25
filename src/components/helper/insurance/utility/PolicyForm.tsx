@@ -1,6 +1,6 @@
 import React, { FormEvent } from 'react';
 
-interface PolicyFormProps{
+interface PolicyFormProps {
   submitAction: (event: FormEvent) => Promise<void>;
   insuredHoursLow: number;
   insuredHoursMid: number;
@@ -29,22 +29,22 @@ export const PolicyForm = (props: PolicyFormProps) => {
           />
           <div className="w-full flex justify-between text-xs px-2">
             <span
-              className="tooltip"
+              className="tooltip tooltip-bottom"
               data-tip={props.insuredHoursLow + ' hours'}
             >
-              <span>Low</span>
+              Low
             </span>
             <span
-              className="tooltip"
+              className="tooltip tooltip-bottom"
               data-tip={props.insuredHoursMid + ' hours'}
             >
-              <span>Mid</span>
+              Mid
             </span>
             <span
-              className="tooltip"
+              className="tooltip tooltip-bottom"
               data-tip={props.insuredHoursHigh + ' hours'}
             >
-              <span>High</span>
+              High
             </span>
           </div>
         </div>
@@ -86,4 +86,4 @@ export const PolicyForm = (props: PolicyFormProps) => {
       </form>
     </>
   );
-}
+};
