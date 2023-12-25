@@ -1,9 +1,11 @@
 import React, { FormEvent } from 'react';
+import { ReloadButton } from './ReloadButton';
 
 interface FundContractProps {
   hasBalance: boolean;
   balance: string;
   fundContract: (event: FormEvent) => Promise<void>;
+  reload: () => Promise<void>
 }
 
 export const FundContract = (props: FundContractProps) => {
@@ -13,7 +15,12 @@ export const FundContract = (props: FundContractProps) => {
       <div className="text-center text-sm">
         Fund the contract with some ETH in order to be able of paying out funds.
       </div>
-      {props.hasBalance && <div>Current Balance: {props.balance} ETH</div>}
+      {props.hasBalance && (
+        <div className="space-x-2">
+          <span>Current Balance: {props.balance} ETH</span>{' '}
+          <ReloadButton onClick={props.reload} />
+        </div>
+      )}
       <form className="space-y-2" onSubmit={props.fundContract}>
         <div>
           <label htmlFor="value" className="font-bold text-xs">
