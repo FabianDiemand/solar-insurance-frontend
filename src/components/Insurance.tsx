@@ -45,20 +45,20 @@ export const Insurance = () => {
       contract
         .getPolicyInformation()
         .then(setPolicyInformation)
-        .catch(console.warn);
+        .catch(console.debug);
 
       contract
         .getInsuredRiskByKey(0)
         .then((risk) => setInsuredHoursLow(risk[1]))
-        .catch(console.warn);
+        .catch(console.debug);
       contract
         .getInsuredRiskByKey(1)
         .then((risk) => setInsuredHoursMid(risk[1]))
-        .catch(console.warn);
+        .catch(console.debug);
       contract
         .getInsuredRiskByKey(2)
         .then((risk) => setInsuredHoursHigh(risk[1]))
-        .catch(console.warn);
+        .catch(console.debug);
 
       contract
         .getRelevantSunshineRecords()
@@ -68,7 +68,7 @@ export const Insurance = () => {
             setHasRecords(true);
           }
         })
-        .catch(console.warn);
+        .catch(console.debug);
 
       setContract(contract);
     }
@@ -120,11 +120,11 @@ export const Insurance = () => {
         .then((risk) => {
           policy.insuredHours = risk[1];
         })
-        .catch(console.warn);
+        .catch(console.debug);
 
       setPolicyInformation(policy);
     } catch (err) {
-      console.warn(err);
+      console.debug(err);
     }
   };
 
@@ -155,7 +155,7 @@ export const Insurance = () => {
       const options = { value: premium };
       await contract.extendPolicy(options);
     } catch (err) {
-      console.warn(err);
+      console.debug(err);
     }
   };
 
@@ -164,7 +164,7 @@ export const Insurance = () => {
       await contract.deletePolicy();
       setHasPolicy(false);
     } catch (err) {
-      console.warn(err);
+      console.debug(err);
     }
   };
 
@@ -176,7 +176,7 @@ export const Insurance = () => {
     try {
       await contract.fileClaim(year);
     } catch (err) {
-      console.warn(err);
+      console.debug(err);
     }
   };
 
@@ -189,7 +189,7 @@ export const Insurance = () => {
         setHasRecords(true);
       }
     } catch (err) {
-      console.warn(err);
+      console.debug(err);
     }
   };
 

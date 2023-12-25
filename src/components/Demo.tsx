@@ -49,7 +49,7 @@ export const Demo = () => {
           setSunshineRecords(recordsSorted);
           setHasRecords(true);
         })
-        .catch(console.warn);
+        .catch(console.debug);
     }
   }, [connected]);
 
@@ -110,7 +110,7 @@ export const Demo = () => {
       setSunshineRecords(recordsSorted);
       setHasRecords(true);
     } catch (err) {
-      console.warn(err);
+      console.debug(err);
     }
   };
 
