@@ -28,8 +28,13 @@ export const CurrentlyActivePolicy = (props: CurrentlyActivePolicyProps) => {
       {props.hasPolicy && (
         <div className="space-y-1">
           <div>
-            <div className="font-bold text-xs">Policy Holder</div>
-            <div className="truncate tooltip" data-tip={props.policy.holder}>
+            <div className="font-bold text-xs">
+              Policy Holder
+            </div>
+            <div
+              className="w-full truncate tooltip tooltip-top"
+              data-tip={props.policy.holder}
+            >
               {props.policy.holder}
             </div>
           </div>

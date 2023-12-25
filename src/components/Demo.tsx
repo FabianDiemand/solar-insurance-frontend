@@ -84,7 +84,7 @@ export const Demo = () => {
     try {
       await contract.createSunshineRecord(year, sunshine, region);
     } catch (err) {
-      console.error(err);
+      console.debug(err);
     }
   };
 
@@ -118,7 +118,7 @@ export const Demo = () => {
     <div className="h-full w-full flex flex-col items-center">
       {/* Introduction section */}
       <h1 className="w-full text-center text-xl font-bold text-black mt-2">
-        Solar Insurance Smart Contract -{' '}
+        Solar Insurance DApp -{' '}
         {<span className="text-red-600">Demo Section</span>}
       </h1>
       <div>

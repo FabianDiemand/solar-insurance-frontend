@@ -196,7 +196,7 @@ export const Insurance = () => {
   return (
     <div className="h-full w-full flex flex-col items-center">
       <h1 className="w-full text-center text-xl font-bold text-black mt-2">
-        Solar Insurance Smart Contract
+        Solar Insurance DApp
       </h1>
       <AboutContract owner={owner} deployment={contractAddress} />
       <div className="w-full h-full flex justify-between">
