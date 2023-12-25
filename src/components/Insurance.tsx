@@ -13,7 +13,10 @@ import {
 } from 'ethers';
 import { SunshineRecords } from './helper/common/SunshineRecords';
 import { FileClaim } from './helper/common/FileClaim';
-import { CurrentlyActivePolicy, InsurancePolicy } from './helper/insurance/CurrentlyActivePolicy';
+import {
+  CurrentlyActivePolicy,
+  InsurancePolicy,
+} from './helper/insurance/CurrentlyActivePolicy';
 import { PolicyForm } from './helper/insurance/utility/PolicyForm';
 import { RegisterPolicy } from './helper/insurance/RegisterPolicy';
 import { CalculatePremium } from './helper/insurance/CalculatePremium';
@@ -68,8 +71,10 @@ export const Insurance = () => {
       contract
         .getRelevantSunshineRecords()
         .then((record) => {
-          setSunshineRecords(new Array(record));
-          setHasRecords(true);
+          if (record[2] > 0) {
+            setSunshineRecords(new Array(record));
+            setHasRecords(true);
+          }
         })
         .catch(console.warn);
 
@@ -122,10 +127,6 @@ export const Insurance = () => {
         .getInsuredRiskOfPolicy()
         .then((risk) => {
           policy.insuredHours = risk[1];
-                    // setPolicy({
-                    //   ...policy,
-                    //   insuredHours: risk[1],
-                    // });
         })
         .catch(console.warn);
 
@@ -190,8 +191,11 @@ export const Insurance = () => {
   const getSunshineRecords = async () => {
     try {
       const sunshineRecord = await contract.getRelevantSunshineRecords();
-      setSunshineRecords(new Array(sunshineRecord));
-      setHasRecords(true);
+
+      if (sunshineRecord[2] > 0) {
+        setSunshineRecords(new Array(sunshineRecord));
+        setHasRecords(true);
+      }
     } catch (err) {
       console.warn(err);
     }
