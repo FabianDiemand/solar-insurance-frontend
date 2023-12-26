@@ -2,7 +2,7 @@
 
 # Solar Insurance DApp Frontend
 
-FFHS HS 2023/2024, Blockchain, Fabian Diemand  
+FFHS PiBS, HS 2023/2024, Blockchain, Fabian Diemand  
 Dozenten: Malik El Bay, Oliver Dressler  
 Repository Frontend: https://github.com/FabianDiemand/solar-insurance-frontend  
 Repository Smart Contract:  https://github.com/FabianDiemand/solar-insurance-smartcontract  
