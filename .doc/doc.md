@@ -74,23 +74,23 @@ Folgende Prompts wurden verwendet, um ein Resultat zu generieren bzw. zu verfein
 >
 >The insurance policies are modelled as a smart contract. Therefore the logo should somehow reflect the usage of a blockchain and web3.
 
-Resultat:  
+Resultat: <br>
 <img src='./img/logo_v1.png' width='33%'/>
 
 >Make it simpler, put more emphasis on the solar aspect. Also use more warm colours, to make the logo more welcoming.
 
-Resultat:  
+Resultat: <br>
 <img src='./img/logo_v2.png' width='33%'/>
 
 >Please make the white background of that image transparent.
 
-Resultat:
+Resultat: <br>
 <img src='./img/logo_w_text.png' width='33%'>
 
 #### Pexels
 [Pexels](https://www.pexels.com/de-de/foto/licht-dach-sonne-technologie-18316989/) wird verwendet, um das Hintergrundbild der Anwendung zur Verfügung zu stellen. Bilder von Pexels sind kostenlos und dürfen selbst für kommerzielle Zwecke ohne Lizenz oder entsprechende Erwähnung verwendet werden.
 
-Mangels CDN für die Anwendung verweist die [Quell-URL](https://images.pexels.com/photos/18316989/pexels-photo-18316989/free-photo-of-licht-dach-sonne-technologie.jpeg) direkt auf Pexels.
+Mangels CDN für die Anwendung verweist die [Quell-URL direkt auf Pexels](https://images.pexels.com/photos/18316989/pexels-photo-18316989/free-photo-of-licht-dach-sonne-technologie.jpeg).
 
 
 ## 5 Installation
