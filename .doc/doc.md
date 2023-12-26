@@ -12,16 +12,16 @@ Repository Smart Contract:  https://github.com/FabianDiemand/solar-insurance-sma
 ## Inhalt
 * [1 Einleitung](#1-einleitung)
 * [2 Smart Contract](#2-smart-contract)
-* [2 Erklärung GUI](#3-erklärung-gui)
-  * [2.1 Hauptansicht/ Landing Page](#31-hauptansicht-landing-page)
-  * [2.2 Demo-Ansicht](#32-demo-ansicht)
+* [3 Erklärung GUI](#3-erklärung-gui)
+  * [3.1 Hauptansicht/ Landing Page](#31-hauptansicht-landing-page)
+  * [3.2 Demo-Ansicht](#32-demo-ansicht)
 * [4 Technologien und Services](#4-technologien-und-services)
   * [4.1 VS Code und Docker](#41-vs-code-und-docker)
   * [4.2 ReactJS, Tailwind und DaisyUI](#42-reactjs-tailwind-und-daisyui)
   * [4.3 Ethers.js](#43-ethersjs)
   * [4.4 Weitere](#44-weitere)
-* [3 Installation](#5-installation)
-* [4 Demo/ Storybook](#6-demo-storybook)
+* [5 Installation](#5-installation)
+* [6 Demo/ Storybook](#6-demo-storybook)
 
 ---
 
