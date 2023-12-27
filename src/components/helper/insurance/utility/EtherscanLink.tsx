@@ -5,6 +5,13 @@ interface EtherScanProps{
   address: string
 }
 
+/**
+ * Displays a title, the etherscan logo and the link to an address passed as properties on instantiation.
+ * The etherscan link is opened in a new browser tab.
+ * 
+ * @param props the title for the component and the address to forward to
+ * @returns the EtherscanLink component
+ */
 export const EtherscanLink = (props: EtherScanProps) => {
   return (
     <tr className="h-6">

@@ -5,6 +5,13 @@ interface FileClaimProps {
   fileClaim: (event: FormEvent) => Promise<void>;
 }
 
+/**
+ * The component offers a form to file a claim on a user specified year, which is submitted to a function passed as a property on instantiation.
+ * An additional text will be displayed, if the component is used in a demo scenario.
+ * 
+ * @param props a boolean to establish, if the component will be used as a demo, or in production, along with a function to trigger if a claim is filed.
+ * @returns the FileClaim component
+ */
 export const FileClaim = (props: FileClaimProps) => {
   return (
     <>

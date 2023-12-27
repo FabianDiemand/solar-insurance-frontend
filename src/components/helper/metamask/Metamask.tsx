@@ -10,6 +10,12 @@ import {
 } from './Metamask.atoms';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 
+/**
+ * Component to connect the DApp to the user's Metamask wallet. It contains a connect button, which forwards the request for connection to metamask.
+ * Furthermore it informs the user about the features of Metamask and how to download the browser extension.
+ * 
+ * @returns the Metamask Component.
+ */
 export const Metamask = () => {
   const setAccount = useSetRecoilState(accountState);
   const setSigner = useSetRecoilState(signerState);
@@ -21,6 +27,7 @@ export const Metamask = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [metamaskInstalled, setMetamaskInstalled] = useState(false);
 
+  // Handle cases where Metamask is not installed
   useEffect(() => {
     if (window.ethereum == null) {
       setErrorMessage(
@@ -32,6 +39,9 @@ export const Metamask = () => {
     }
   }, []);
 
+  /**
+   * Connect to the Metamask wallet and set the corresponding account in the dapp state
+   */
   const connectWallet = async () => {
     try {
       const provider = new ethers.BrowserProvider(window.ethereum);

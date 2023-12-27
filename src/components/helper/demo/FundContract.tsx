@@ -8,6 +8,13 @@ interface FundContractProps {
   reload: () => Promise<void>
 }
 
+/**
+ * Displays the balance of the contract and a form which takes in a number input for how many ether to fund the smart contract with when submitting the form using a function passed at instantiation.
+ * Furthermore, there is a reload icon displayed to update balance of the contract.
+ * 
+ * @param props a boolean toggle for if there is a balance to be displayed, the balance to display, a function to handle the submission of the form and a reload function to update the balance
+ * @return the FundContract component
+ */
 export const FundContract = (props: FundContractProps) => {
   return (
     <>

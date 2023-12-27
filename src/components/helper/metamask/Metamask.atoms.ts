@@ -1,6 +1,10 @@
 import { BrowserProvider, Signer } from 'ethers';
 import { atom } from 'recoil';
 
+/**
+ * Recoil Atoms to share certain wallet/ provider related states across the app.
+ */
+
 export const accountState = atom<string>({
     key: 'accountState',
     default: '',

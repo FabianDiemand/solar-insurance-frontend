@@ -6,6 +6,13 @@ interface SunshineRecordsProps{
   getSunshineRecords: () => void;
 }
 
+/**
+ * The component displays a table of recorded annual sunshine durations and a button to update the records.
+ * No table will be shown, if no records are existing or the passed property is empty.
+ * 
+ * @param props a boolean to specify if records are existing, the array containing sunshine records and a method to trigger when updating the records
+ * @returns the SunshineRecords component
+ */
 export const SunshineRecords = (props: SunshineRecordsProps) => {
   return (
     <>

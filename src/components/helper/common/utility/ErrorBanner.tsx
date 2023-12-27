@@ -1,8 +1,19 @@
 import React, { useState } from 'react';
 
+/**
+ * Component to show a banner with a red background at the bottom-left of the screen, displaying a message passed as a property at instantiation.
+ * The banner is removed when clicking it.
+ * 
+ * @param props the message to display on the banner
+ * @returns the ErrorBanner component
+ */
 export const ErrorBanner= (props: {message: string}) => {
   const [hidden, setHidden] = useState(false);
 
+  /**
+   * On click handler for the div which contains the banner.
+   * Remove the banner when clicked, by toggling the 'hidden' state.
+   */
   const hideBanner = () => {
     setHidden(true);
   };

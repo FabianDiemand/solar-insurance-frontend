@@ -10,6 +10,12 @@ interface RegisterPolicyProps{
   submitButtonText: string;
 }
 
+/**
+ * Displays the component which allows the user to register a certain policy configuration with the insurance.
+ * 
+ * @param props the function to trigger on submit of the form, insured hours for the risk levels and the text for the submit button of the form
+ * @returns the RegisterPolicy component
+ */
 export const RegisterPolicy = (props: RegisterPolicyProps) => {
   return (
     <>

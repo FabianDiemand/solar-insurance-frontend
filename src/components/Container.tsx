@@ -9,12 +9,20 @@ import { useRecoilValue } from 'recoil';
 import { connectedState } from './helper/metamask/Metamask.atoms';
 import { Navigation } from './helper/navigation/Navigation';
 
+/**
+ * Top level container for the insurance and the demo view as well as the navigation.
+ * 
+ * @returns the Container component
+ */
 export const Container = () => {
   const connected = useRecoilValue(connectedState);
 
   const [insuranceActive, setInsuranceActive] = useState(true);
   const [demoActive, setDemoActive] = useState(false);
 
+  /**
+   * Toggle the state for which view is currently displayed.
+   */
   const flipViews = () => {
     setInsuranceActive(!insuranceActive);
     setDemoActive(!demoActive);

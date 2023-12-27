@@ -19,6 +19,12 @@ export type InsurancePolicy = {
   claimTimeout: Date;
 };
 
+/**
+ * Displays all information about the currently active policy of a user in a list. Furthermore it allows for deletion of the policy, the extension and a refresh of the current view.
+ * 
+ * @param props a toggle for if there is a policy, the policy to display and the functions to extend, delete and update the policy.
+ * @returns the CurrentlyActivePolicy component
+ */
 export const CurrentlyActivePolicy = (props: CurrentlyActivePolicyProps) => {
   return (
     <>

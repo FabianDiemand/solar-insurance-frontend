@@ -13,6 +13,11 @@ import {
 import { RegisterPolicy } from './helper/insurance/RegisterPolicy';
 import { CalculatePremium } from './helper/insurance/CalculatePremium';
 
+/**
+ * Allows to interact with the calculate premium, register policy, extend and delete policy and file claim functions of the smart contract.
+ * 
+ * @returns the Insurance component
+ */
 export const Insurance = () => {
   const [owner, setOwner] = useState('');
   const [contractAddress, setContractAddress] = useState('');
@@ -40,6 +45,7 @@ export const Insurance = () => {
         signer,
       );
 
+      // Fetch owner and address of the contract
       contract.owner().then(setOwner);
       contract.getAddress().then(setContractAddress);
       contract
@@ -47,6 +53,7 @@ export const Insurance = () => {
         .then(setPolicyInformation)
         .catch(console.debug);
 
+      // Fetch information about the insurance levels for the tooltips
       contract
         .getInsuredRiskByKey(0)
         .then((risk) => setInsuredHoursLow(risk[1]))
@@ -60,6 +67,7 @@ export const Insurance = () => {
         .then((risk) => setInsuredHoursHigh(risk[1]))
         .catch(console.debug);
 
+      // Fetch sunshine records recorded
       contract
         .getRelevantSunshineRecords()
         .then((record) => {
@@ -74,6 +82,10 @@ export const Insurance = () => {
     }
   }, [connected]);
 
+  /**
+   * Calculate the premium to pay for a certain policy configuration specified in a form.
+   * @param event the form event containing the data about the desired policy configuration
+   */
   const calculatePremium = async (event: FormEvent) => {
     event.preventDefault();
 
@@ -90,6 +102,10 @@ export const Insurance = () => {
     }
   };
 
+  /**
+   * Register a certain policy configuration specified in a form.
+   * @param event the form event containing the data about the desired policy configuration
+   */
   const registerPolicy = async (event: FormEvent) => {
     event.preventDefault();
 
@@ -107,6 +123,9 @@ export const Insurance = () => {
     }
   };
 
+  /**
+   * Fetch and display the policy of the connected account.
+   */
   const displayPolicy = async () => {
     try {
       const policy = await contract.getPolicyInformation();
@@ -128,6 +147,10 @@ export const Insurance = () => {
     }
   };
 
+  /**
+   * Set the state of the policy variable, using the policy response from the smart contract.
+   * @param policy the policy response from the contract
+   */
   const setPolicyInformation = async (policy) => {
     setHasPolicy(true);
 
@@ -143,6 +166,9 @@ export const Insurance = () => {
     });
   };
 
+  /**
+   * Extend the policy by one year.
+   */
   const extendPolicy = async () => {
     try {
       const policy = await contract.getPolicyInformation();
@@ -159,6 +185,9 @@ export const Insurance = () => {
     }
   };
 
+  /**
+   * Delete the policy.
+   */
   const deletePolicy = async () => {
     try {
       await contract.deletePolicy();
@@ -168,6 +197,10 @@ export const Insurance = () => {
     }
   };
 
+  /**
+   * File a claim for a year specified by the user in a form.
+   * @param event the event containing the data about which year to file a claim for
+   */
   const fileClaim = async (event: FormEvent) => {
     event.preventDefault();
 
@@ -180,6 +213,9 @@ export const Insurance = () => {
     }
   };
 
+  /**
+   * Fetch the sunshine records relevant for the users policy.
+   */
   const getSunshineRecords = async () => {
     try {
       const sunshineRecord = await contract.getRelevantSunshineRecords();

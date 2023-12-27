@@ -4,6 +4,12 @@ interface CreateSunshineRecordProps{
   createSunshineRecord: (event: FormEvent) => Promise<void>;
 }
 
+/**
+ * Displays a form which takes parameters for a sunshine record (year, region and duration) as inputs and submits them using a function passed as a property on instantiation.
+ * 
+ * @param props the function called on submission of the form, taking the corresponding FormEvent
+ * @returns the CreateSunshineRecord component
+ */
 export const CreateSunshineRecord = (props: CreateSunshineRecordProps) => {
   return (
     <>

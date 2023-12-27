@@ -13,6 +13,12 @@ interface CalculatePremiumProps {
   premium: string;
 }
 
+/**
+ * Displays the component which allows the user to calculate the premium for a certain policy configuration.
+ * 
+ * @param props the function to trigger on submit of the form, insured hours for the risk levels and the text for the submit button of the form
+ * @returns the CalculatePremium component
+ */
 export const CalculatePremium = (props: CalculatePremiumProps) => {
   return (
     <>

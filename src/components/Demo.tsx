@@ -12,6 +12,11 @@ import { FileClaim } from './helper/common/FileClaim';
 import { CreateSunshineRecord } from './helper/demo/CreateSunshineRecords';
 import { FundContract } from './helper/demo/FundContract';
 
+/**
+ * Allows to interact with the fund contract, create sunshine records and file claim functions of the smart contract.
+ * 
+ * @returns the Demo component
+ */
 export const Demo = () => {
   const connected = useRecoilValue(connectedState);
   const provider = useRecoilValue(providerState);
@@ -26,6 +31,7 @@ export const Demo = () => {
 
   useEffect(() => {
     if (connected) {
+      // Instantiate contract
       const contract = new Contract(
         process.env.CONTRACT_ADDRESS,
         SolarInsuranceABI,
@@ -34,11 +40,13 @@ export const Demo = () => {
 
       setContract(contract);
 
+      // Get the contract's balance
       provider.getBalance(contract.getAddress()).then((bal) => {
         setBalance(bal);
         setHasBalance(true);
       });
 
+      // Fetch the sunshine records
       contract
         .getRelevantSunshineRecordsWithoutChecks()
         .then((records) => {
@@ -53,6 +61,10 @@ export const Demo = () => {
     }
   }, [connected]);
 
+  /**
+   * Fund the contract with an amount of ether specified in a form input.
+   * @param event the event containing the numeric input from the user
+   */
   const fundContract = async (event: FormEvent) => {
     event.preventDefault();
 
@@ -67,6 +79,9 @@ export const Demo = () => {
     }
   };
 
+  /**
+   * Fetch the balance information from the contract
+   */
   const getFund = async () => {
     provider.getBalance(contract.getAddress()).then((bal) => {
       setBalance(bal);
@@ -74,6 +89,10 @@ export const Demo = () => {
     });
   };
 
+  /**
+   * Create a sunshine record with parameters (year, region, duration) specified in a form.
+   * @param event the event containing the inputs from the user
+   */
   const createSunshineRecord = async (event: FormEvent) => {
     event.preventDefault();
 
@@ -88,6 +107,10 @@ export const Demo = () => {
     }
   };
 
+  /**
+   * File a claim with the insurance contract (not as many checks as the productive endpoint for file claims).
+   * @param event the event containing the inputs from the user
+   */
   const fileClaim = async (event: FormEvent) => {
     event.preventDefault();
 
@@ -99,6 +122,9 @@ export const Demo = () => {
     }
   };
 
+  /**
+   * Fetch the sunshine records from the smart contract.
+   */
   const getSunshineRecords = async () => {
     try {
       const sunshineRecords =

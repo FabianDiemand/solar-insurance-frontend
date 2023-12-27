@@ -4,6 +4,12 @@ interface ReloadButtonProps {
   onClick: () => Promise<void> | void;
 }
 
+/**
+ * A button consisting of a reload icon, triggering a function passed as a property on instantiation.
+ * 
+ * @param props the function to trigger on click
+ * @returns the ReloadButton component
+ */
 export const ReloadButton = (props: ReloadButtonProps) => {
   return (
     <button

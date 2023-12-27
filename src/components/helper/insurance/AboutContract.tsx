@@ -5,6 +5,12 @@ interface AboutProps{
   deployment: string
 }
 
+/**
+ * Displays some meta information about the contract (owner and contract address) as links to etherscan.
+ * 
+ * @param props the owner and contract address
+ * @returns the AboutContract component
+ */
 export const AboutContract = (props: AboutProps) => {
   return (
     <div className="w-fit h-fit bg-gray-transparent px-6 py-3 my-4 rounded-md shadow-lg">

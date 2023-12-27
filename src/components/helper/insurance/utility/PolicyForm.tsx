@@ -9,6 +9,13 @@ interface PolicyFormProps {
   submitButtonText: string;
 }
 
+/**
+ * Displays a form which takes as inputs all information needed for an insurance policy to be registered (risk level, panel region and panel area).
+ * Tooltips are used to display the amount of hours insured at the various risk levels. On submit, a function passed is triggered.
+ * 
+ * @param props the function to trigger on submit, the hours insured at each risk level and the text displayed on the submit button
+ * @returns the PolicyForm component
+ */
 export const PolicyForm = (props: PolicyFormProps) => {
   return (
     <>

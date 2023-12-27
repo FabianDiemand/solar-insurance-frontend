@@ -6,6 +6,12 @@ interface NavigationProps{
   flipViews: () => void;
 }
 
+/**
+ * Navigation component displaying two tabs to switch between the main and demo views.
+ * 
+ * @param props two toggles for which view is active and a function to switch between them
+ * @returns the Navigation component
+ */
 export const Navigation = (props: NavigationProps) => {
   return (
     <div role="tablist" className="w-[60%] tabs">
